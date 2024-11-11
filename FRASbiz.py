@@ -99,14 +99,14 @@ client = gspread.authorize(creds)
 sheet = client.open("AttendanceSystemUsers").sheet1  # Open the Google Sheet
 
 attendance_files = {
-    "II-AI & DS": r"C:\Users\mvasu\PycharmProjects\FRASbiz\Attendance_j.csv",  # Replace with actual file path
-    "III-AI & DS": r"C:\Users\mvasu\PycharmProjects\FRASbiz\Attendance_s.csv"  # Replace with actual file path
+    "II-AI & DS": r"Attendance_j.csv",  # Replace with actual file path
+    "III-AI & DS": r"Attendance_s.csv"  # Replace with actual file path
 }
 
 # Define pages and styling for navigation bar
 pages = ["Home", "Upload Image", "Capture Image","LogOut"]
 parent_dir = os.path.dirname(os.path.abspath(__file__))
-logo_path = r"C:\Users\mvasu\Downloads\punch.svg"
+logo_path = r"punch.svg"
 styles = {
     "nav": {
         "box-sizing": "border-box",
