@@ -1,4 +1,4 @@
-pip --upgrade pip
+--upgrade pip
 setuptools
 wheel
 streamlit==1.33.0
