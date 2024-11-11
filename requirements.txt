@@ -8,4 +8,4 @@ numpy==1.23.5
 pandas==2.1.1
 Pillow==10.0.1
 mtcnn==0.1.1
-dlib==19.1.0
+dlib==19.7.0
