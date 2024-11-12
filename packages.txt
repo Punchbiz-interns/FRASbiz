@@ -3,4 +3,4 @@ make
 gcc
 g++
 python3-pip
-distutils
+python3-distutils
