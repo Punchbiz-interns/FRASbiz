@@ -1,4 +1,5 @@
 import os
+import json
 import streamlit as st
 from streamlit import session_state
 from streamlit_navigation_bar import st_navbar
@@ -6,6 +7,23 @@ import E_Upload
 import F_capture
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+
+
+# Construct JSON using environment variables
+credentials = {
+    "type": "service_account",
+    "project_id": "attendance-system-439310",
+    "private_key_id": os.getenv("PRIVATE_KEY_ID"),
+    "private_key": os.getenv("PRIVATE_KEY").replace("\\n", "\n"),  # Correct newline format for private key
+    "client_email": os.getenv("CLIENT_EMAIL"),
+    "client_id": os.getenv("CLIENT_ID"),
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": os.getenv("CLIENT_X509_CERT_URL"),
+    "universe_domain": "googleapis.com"
+}
+
 
 # Initialize session state variables for authentication and navigation
 if 'page' not in st.session_state:
@@ -94,7 +112,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name("credentials", scope)
 client = gspread.authorize(creds)
 sheet = client.open("AttendanceSystemUsers").sheet1  # Open the Google Sheet
 
