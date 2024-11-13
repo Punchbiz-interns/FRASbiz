@@ -8,4 +8,4 @@ numpy==1.23.5
 pandas==2.1.1
 Pillow==10.0.1
 mtcnn==0.1.1
-dlib @ https://github.com/shashankx86/dlib_compiled/blob/v19.22/dlib-19.22.99-cp39-cp39-win_amd64.whl
+dlib-bin
