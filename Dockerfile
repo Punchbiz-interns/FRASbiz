@@ -4,21 +4,22 @@ FROM mcr.microsoft.com/windows/servercore:ltsc2022
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy and install system dependencies (if any) from packages.txt
+# Copy packages.txt (if you have system dependencies listed there)
 COPY packages.txt . 
 
+# Install system dependencies using Chocolatey
 RUN powershell -Command `
-    if (Test-Path packages.txt) { `
+    if (Test-Path "packages.txt") { `
         Get-Content packages.txt | ForEach-Object { `
-            choco install $_ -y `
+            choco install $_ -y; `
         } `
     }
 
 # Install Python (if not included in the base image)
 RUN powershell -Command `
-    Invoke-WebRequest -Uri https://www.python.org/ftp/python/3.9.9/python-3.9.9-amd64.exe -OutFile python.exe; `
-    Start-Process python.exe -ArgumentList '/quiet InstallAllUsers=1 PrependPath=1' -NoNewWindow -Wait; `
-    Remove-Item python.exe
+    Invoke-WebRequest -Uri https://www.python.org/ftp/python/3.9.9/python-3.9.9-amd64.exe -OutFile python-installer.exe; `
+    Start-Process python-installer.exe -ArgumentList '/quiet InstallAllUsers=1 PrependPath=1' -NoNewWindow -Wait; `
+    Remove-Item python-installer.exe
 
 # Copy requirements.txt and pre-built .whl files (e.g., dlib) into the container
 COPY requirements.txt requirements.txt
