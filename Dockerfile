@@ -4,15 +4,18 @@ FROM mcr.microsoft.com/windows/servercore:ltsc2022
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy packages.txt (if you have system dependencies listed there)
+# Install Chocolatey (if needed for installing Windows dependencies)
+RUN powershell -NoProfile -InputFormat None -Command `
+    Set-ExecutionPolicy Bypass -Scope Process -Force; `
+    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; `
+    Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+# Copy and install system dependencies from packages.txt (optional)
 COPY packages.txt . 
 
-# Install system dependencies using Chocolatey
 RUN powershell -Command `
-    if (Test-Path "packages.txt") { `
-        Get-Content packages.txt | ForEach-Object { `
-            choco install $_ -y; `
-        } `
+    Get-Content packages.txt | ForEach-Object { `
+        choco install $_ -y; `
     }
 
 # Install Python (if not included in the base image)
