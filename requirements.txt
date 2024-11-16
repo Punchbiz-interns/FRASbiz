@@ -11,4 +11,4 @@ pandas==2.1.1
 Pillow==10.0.1
 mtcnn==0.1.1
 cmake
-dlib==19.5.0
+dlib==19.8.1
