@@ -1,33 +1,26 @@
-# Use a lightweight Windows-based Python image
-FROM mcr.microsoft.com/windows/servercore:ltsc2022
+# Use a lightweight Python base image
+FROM python:3.9-slim
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Install Chocolatey
-RUN powershell -Command \
-    "Set-ExecutionPolicy Bypass -Scope Process -Force; \
-    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12; \
-    Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"
-
-# Copy packages.txt into the container (optional)
+# Copy the packages.txt file if it exists (for system-level dependencies)
 COPY packages.txt .
 
-# Install dependencies from packages.txt using Chocolatey if packages.txt exists
-RUN powershell -Command \
-    "if (Test-Path 'packages.txt') { \
-        Get-Content packages.txt | ForEach-Object { choco install $_ -y }; \
-    }"
+# Install system dependencies if packages.txt exists
+RUN if [ -f packages.txt ]; then \
+      apt-get update && \
+      xargs -a packages.txt apt-get install -y && \
+      rm -rf /var/lib/apt/lists/*; \
+    fi
 
-# Copy requirements.txt and pre-built .whl files (e.g., dlib) into the container
+# Copy requirements.txt into the container
 COPY requirements.txt requirements.txt
-COPY *.whl /app/
 
-# Install Python dependencies from requirements.txt and any .whl files
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir /app/*.whl
 
-# Copy all application files from your repository into the container
+# Copy all files from your repository into the container
 COPY . .
 
 # Expose the port that Streamlit uses (default: 8501)
