@@ -14,8 +14,7 @@ venv/
 build/
 dist/
 *.egg-info/
-# Secrets and environment variables
-.env
+
 # Windows
 Thumbs.db
 # PyCharm
@@ -23,8 +22,7 @@ Thumbs.db
 *.iml
 # Log files
 *.log
-# Package dependency file
-packages.txt
+
 # Ignore dynamically generated JSON credentials
 credentials
 # Streamlit temporary files
